@@ -1,0 +1,28 @@
+name: 'OpenTofu IaC CI'
+
+on:
+  pull_request:
+    paths:
+      - 'infrastructure/**'
+
+jobs:
+  opentofu-plan:
+    name: 'OpenTofu Format & Plan'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup OpenTofu
+        uses: opentofu/setup-opentofu@v1
+        with:
+          tofu_version: 1.6.0
+
+      - name: Tofu Format Check
+        run: tofu fmt -check -recursive
+        working-directory: ./infrastructure
+
+      - name: TFSec Security Scanner
+        uses: aquasecurity/tfsec-action@v1.0.3
+        with:
+          working_directory: ./infrastructure

@@ -1,9 +1,0 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-
-# Deploy Tekton Pipelines from official release
-resources:
-  - https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
-
-# Optional: Add dashboard or triggers here
-#  - https://storage.googleapis.com/tekton-releases/dashboard/latest/release.yaml
