@@ -18,24 +18,35 @@ Our DevOps cycle is designed to be entirely commit-driven, eliminating the need 
 5. **Storage & Persistence:** Stateful applications utilize `Rook-Ceph` for cloud-agnostic block and object storage.
 
 ```mermaid
-graph TD
-    Developer[Developer] -->|Git Push| Repo[(Git Repository)]
-    
-    subgraph K8s [Kubernetes Cluster]
-        Repo -->|Triggers| Tekton[Tekton Pipelines]
-        Tekton -->|Build & Scan| Trivy[Trivy Security Scan]
-        Trivy -->|Push| Registry[(Container Registry)]
-        
-        Repo -->|Manifest Updates| ArgoCD[ArgoCD GitOps]
-        ArgoCD -->|Syncs| AppNamespace[App Deployment]
-        
-        subgraph Storage [Storage Layer]
-            AppNamespace --> Ceph[(Rook-Ceph / Block & S3)]
-        end
+graph LR
+    subgraph Provisioning [Infrastructure Provisioning]
+        Tofu[OpenTofu IaC]
+        Ansible[Ansible Configuration]
+    end
+
+    subgraph VersionControl [Version Control]
+        Git[(Git Repository)]
     end
     
-    Tofu[OpenTofu IaC] -->|Provisions| K8s
-    Ansible[Ansible] -->|Configures Bare-Metal| K8s
+    subgraph K8s [Kubernetes Cluster]
+        Tekton[Tekton CI]
+        ArgoCD[ArgoCD GitOps]
+        App[App Deployment]
+        Ceph[(Rook-Ceph Storage)]
+    end
+    
+    Dev[Developer] -->|Push Code| Git
+    Tofu -->|Provisions EKS| K8s
+    Ansible -->|Bootstraps Bare-Metal| K8s
+    
+    Git -->|Triggers Build| Tekton
+    Tekton -->|Scans & Pushes Image| Registry[(Container Registry)]
+    
+    Git -->|Monitors Manifests| ArgoCD
+    ArgoCD -->|Syncs State| App
+    Registry -.->|Pulls Image| App
+    
+    App -->|Persists Data| Ceph
 ```
 
 ## 🛠️ Technology Stack
