@@ -1,0 +1,22 @@
+---
+- name: Bootstrap Bare-Metal K3s Cluster
+  hosts: all
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+      when: ansible_os_family == 'Debian'
+
+    # Note: In a real-world scenario, we would use the official k3s-ansible role.
+    # This playbook is a simplified representation of the bootstrap process.
+    - name: Download and install K3s
+      shell: "curl -sfL https://get.k3s.io | sh -"
+      args:
+        creates: /usr/local/bin/k3s
+
+    - name: Ensure K3s is running
+      systemd:
+        name: k3s
+        state: started
+        enabled: yes
