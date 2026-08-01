@@ -66,5 +66,17 @@ graph LR
 * `/kubernetes` - Kustomize/Helm manifests for the application and system components.
 * `/app` - The Go microservice source code.
 
+## 🧩 Enterprise Extensions (Optional Modules)
+This blueprint is designed like a Lego set. It includes a modular `/kubernetes/extensions` directory containing pre-configured, industry-standard tools that can be enabled on-demand depending on the client's needs, without bloating the core architecture:
+
+| Category | Component | Description |
+| :--- | :--- | :--- |
+| **Networking & Mesh** | `cilium-mesh` | eBPF-based high performance Service Mesh & CNI. |
+| **Traffic & SSL** | `ingress-nginx` & `cert-manager` | Automated Let's Encrypt TLS and edge routing. |
+| **Identity & IAM** | `keycloak` | Open-Source Identity and Access Management (SSO). |
+| **Secrets Management**| `hashicorp-vault` | Secure storage for API keys and database passwords. |
+| **API Gateway** | `kong-gateway` | Rate-limiting, WAF, and microservices routing. |
+| **Observability** | `prometheus` + `loki` | Full-stack metrics and lightweight centralized logging. |
+
 ## 🚀 Bootstrap Guide
 *Clone the repository and follow the instructions in the respective layer folders to spin up the entire stack.*
