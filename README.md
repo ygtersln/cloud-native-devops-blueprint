@@ -61,7 +61,7 @@ graph LR
 * **DevSecOps (Shift-Left):** GitHub Actions (IaC Pipeline), `tfsec` & Trivy (Security Scanning), `pre-commit` hooks.
 * **Storage:** Rook-Ceph (Cloud-agnostic block & object storage)
 * **Developer Experience (DX):** Unified `Makefile` for local operations.
-* **Application Layer:** Go (Golang) microservice (Multi-stage, Distroless secure Dockerfile)
+* **Application Layer:** 3-Tier Microservices (React/HTML Frontend, Go API Backend, Redis Database)
 
 ## 📁 Repository Structure
 * `/infrastructure` - OpenTofu modules for spinning up VPCs, EKS Clusters, and RDS databases.

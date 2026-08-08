@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blueprint-redis
+  labels:
+    app: blueprint-redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blueprint-redis
+  template:
+    metadata:
+      labels:
+        app: blueprint-redis
+    spec:
+      containers:
+        - name: redis
+          image: redis:7-alpine
+          ports:
+            - containerPort: 6379
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blueprint-redis
+  labels:
+    app: blueprint-redis
+spec:
+  type: ClusterIP
+  ports:
+    - port: 6379
+      targetPort: 6379
+      protocol: TCP
+  selector:
+    app: blueprint-redis

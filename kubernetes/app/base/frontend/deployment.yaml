@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blueprint-frontend
+  labels:
+    app: blueprint-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: blueprint-frontend
+  template:
+    metadata:
+      labels:
+        app: blueprint-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: blueprint-frontend:latest
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: blueprint-frontend
+  labels:
+    app: blueprint-frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 80
+      targetPort: 80
+      nodePort: 30080
+      protocol: TCP
+  selector:
+    app: blueprint-frontend

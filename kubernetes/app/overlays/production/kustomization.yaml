@@ -11,17 +11,15 @@ commonLabels:
 patches:
   - target:
       kind: Deployment
-      name: blueprint-app
+      name: blueprint-frontend
     patch: |-
       - op: replace
         path: /spec/replicas
         value: 3
-      - op: add
-        path: /spec/template/spec/containers/0/resources
-        value:
-          limits:
-            cpu: "1000m"
-            memory: "512Mi"
-          requests:
-            cpu: "500m"
-            memory: "256Mi"
+  - target:
+      kind: Deployment
+      name: blueprint-backend
+    patch: |-
+      - op: replace
+        path: /spec/replicas
+        value: 3

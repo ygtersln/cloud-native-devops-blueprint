@@ -3,10 +3,26 @@
   hosts: all
   become: yes
   tasks:
-    - name: Update apt cache
+    - name: Set timezone to Europe/Istanbul
+      timezone:
+        name: Europe/Istanbul
+
+    - name: Install essential packages (curl, wget, chrony, git)
       apt:
+        name: 
+          - curl
+          - wget
+          - chrony
+          - git
+        state: present
         update_cache: yes
       when: ansible_os_family == 'Debian'
+
+    - name: Ensure Chrony (NTP) is running
+      systemd:
+        name: chrony
+        state: started
+        enabled: yes
 
     # Note: In a real-world scenario, we would use the official k3s-ansible role.
     # This playbook is a simplified representation of the bootstrap process.

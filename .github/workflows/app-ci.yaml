@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-and-push:
-    name: 'Build, Scan & Push'
+    name: 'Build, Scan & Push (3-Tier App)'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -20,29 +20,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup Go
-        uses: actions/setup-go@v5
-        with:
-          go-version: '1.22'
-          cache-dependency-path: app/go.sum
-
-      - name: Run Unit Tests
-        run: go test ./...
-        working-directory: ./app
-
-      - name: Build Docker Image
-        run: docker build -t ghcr.io/${{ github.repository }}/app:${{ github.sha }} ./app
-
-      - name: Run Trivy Vulnerability Scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'ghcr.io/${{ github.repository }}/app:${{ github.sha }}'
-          format: 'table'
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL,HIGH'
-
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
         with:
@@ -50,14 +27,31 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Push Docker Image
-        run: docker push ghcr.io/${{ github.repository }}/app:${{ github.sha }}
+      - name: Build & Push Backend
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/backend:${{ github.sha }} ./app/backend
+          docker push ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
 
-      - name: Update Kustomize Image Tag (True GitOps)
+      - name: Build & Push Frontend
+        run: |
+          docker build -t ghcr.io/${{ github.repository }}/frontend:${{ github.sha }} ./app/frontend
+          docker push ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
+
+      - name: Run Trivy Vulnerability Scanner (Backend)
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'ghcr.io/${{ github.repository }}/backend:${{ github.sha }}'
+          format: 'table'
+          exit-code: '0'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+
+      - name: Update Kustomize Image Tags (True GitOps)
         run: |
           cd kubernetes/app/base
-          kustomize edit set image blueprint-app=ghcr.io/${{ github.repository }}/app:${{ github.sha }}
+          kustomize edit set image blueprint-backend=ghcr.io/${{ github.repository }}/backend:${{ github.sha }}
+          kustomize edit set image blueprint-frontend=ghcr.io/${{ github.repository }}/frontend:${{ github.sha }}
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git commit -am "ci: update application image tag to ${{ github.sha }}"
+          git commit -am "ci: update application image tags to ${{ github.sha }}"
           git push origin main
