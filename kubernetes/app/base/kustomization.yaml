@@ -2,14 +2,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 
 resources:
-  - frontend/deployment.yaml
-  - backend/deployment.yaml
-  - redis/deployment.yaml
+- frontend/deployment.yaml
+- backend/deployment.yaml
+- redis/deployment.yaml
 
 images:
-  - name: blueprint-frontend
-    newName: ghcr.io/ygtersln/cloud-native-devops-blueprint/frontend
-    newTag: latest
-  - name: blueprint-backend
-    newName: ghcr.io/ygtersln/cloud-native-devops-blueprint/backend
-    newTag: latest
+- name: blueprint-backend
+  newName: ghcr.io/ygtersln/cloud-native-devops-blueprint/backend
+  newTag: 25eafc4be485e598ea3217b001c61a766cff94f5
+- name: blueprint-frontend
+  newName: ghcr.io/ygtersln/cloud-native-devops-blueprint/frontend
+  newTag: 25eafc4be485e598ea3217b001c61a766cff94f5
