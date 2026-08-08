@@ -6,7 +6,7 @@ COPY go.mod ./
 COPY *.go ./
 # RUN go mod download
 # For this demo, since we don't have go.sum, we run go mod tidy
-RUN go env -w GOPROXY=direct && go mod tidy
+RUN apk add --no-cache git && go mod tidy
 
 RUN CGO_ENABLED=0 GOOS=linux go build -o blueprint-api .
 
