@@ -3,11 +3,11 @@ FROM golang:1.22-alpine AS builder
 
 WORKDIR /app
 COPY go.mod ./
+COPY *.go ./
 # RUN go mod download
 # For this demo, since we don't have go.sum, we run go mod tidy
 RUN go env -w GOPROXY=direct && go mod tidy
 
-COPY *.go ./
 RUN CGO_ENABLED=0 GOOS=linux go build -o blueprint-api .
 
 # Final minimal stage
