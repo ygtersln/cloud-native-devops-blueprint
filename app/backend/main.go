@@ -41,7 +41,7 @@ func initRedis() {
 	}
 }
 
-func getTasksHandler(w http.http.ResponseWriter, r *http.Request) {
+func getTasksHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 
@@ -70,7 +70,7 @@ func getTasksHandler(w http.http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(jsonString))
 }
 
-func addTaskHandler(w http.http.ResponseWriter, r *http.Request) {
+func addTaskHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	
@@ -116,7 +116,7 @@ func addTaskHandler(w http.http.ResponseWriter, r *http.Request) {
 	w.Write(taskJSON)
 }
 
-func healthHandler(w http.http.ResponseWriter, r *http.Request) {
+func healthHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("OK"))
 }
