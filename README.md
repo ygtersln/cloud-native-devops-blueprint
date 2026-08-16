@@ -38,7 +38,7 @@ graph TD
             Redis[(Redis Cache)]
         end
         
-        subgraph AI Stack (LLMOps)
+        subgraph AI_Stack [AI Stack LLMOps]
             WebUI[Open WebUI<br/>Internal ChatGPT]
             Ollama[Ollama Engine<br/>Llama 3.2 Model]
         end
