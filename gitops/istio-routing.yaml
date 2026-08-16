@@ -9,6 +9,7 @@ spec:
   duration: 720h
   renewBefore: 120h
   isCA: false
+  commonName: blueprint.local
   usages:
     - server auth
     - client auth

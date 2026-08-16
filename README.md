@@ -1,6 +1,6 @@
-# Enterprise Cloud-Native DevOps Blueprint
+# Enterprise Cloud-Native DevOps & LLMOps Blueprint
 
-Welcome to the **Enterprise Cloud-Native DevOps Blueprint**. This project is a comprehensive reference architecture demonstrating a zero-trust, fully automated, and highly observable GitOps pipeline for modern Kubernetes deployments. It was designed as an R&D project to standardize complex infrastructure patterns and provide a robust template for the open-source community.
+Welcome to the **Enterprise Cloud-Native DevOps & LLMOps Blueprint**. This project is a comprehensive reference architecture demonstrating a zero-trust, fully automated, and highly observable GitOps pipeline for modern Kubernetes deployments. It also features a **"Secure, Air-Gapped Enterprise LLMOps Platform"** that allows running Large Language Models (LLMs) completely in-house without exposing sensitive corporate data.
 
 ## 🏛 Architecture Overview
 
@@ -88,6 +88,10 @@ graph TD
 - **Shift-Left Security (Trivy):** Before any image is pushed, the pipeline runs **Aqua Trivy** to scan the Docker images for OS and library vulnerabilities.
 - **Automated GitOps Commit:** Once the CI/CD pipeline passes, GitHub Actions automatically updates the Kustomize manifests with the new image tag (`${{ github.sha }}`) and pushes the changes back to the repository. ArgoCD detects this commit and instantly deploys the new version.
 
+### 6. Secure, Air-Gapped Enterprise LLMOps Platform
+- **In-House LLMOps (Data Privacy):** Runs state-of-the-art open-source LLMs (like Llama 3 via Ollama) completely within the internal Kubernetes network (Air-Gapped). Sensitive corporate data never leaves the internal infrastructure, eliminating the privacy risks of public APIs like OpenAI.
+- **Open WebUI:** Provides a sleek, ChatGPT-like interface connected directly to the internal LLM, making AI accessible to internal employees.
+- **Zero-Trust AI:** The AI interfaces and APIs are secured behind the Istio Ingress Gateway, utilizing mTLS and Vault-issued certificates to ensure enterprise-grade security.
 ## 📦 How to Run
 
 *Since this is a reference architecture, it assumes you have a running K3s cluster. The entire state is managed via the `gitops/` directory.*

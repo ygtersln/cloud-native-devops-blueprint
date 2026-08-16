@@ -14,7 +14,7 @@ metadata:
   name: vault-issuer
 spec:
   vault:
-    server: http://openbao-vault-0.openbao.svc:8200
+    server: http://openbao-vault.openbao.svc:8200
     path: pki/sign/blueprint-dot-local
     auth:
       kubernetes:
