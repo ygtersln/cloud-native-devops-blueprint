@@ -57,9 +57,9 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://openbao.github.io/openbao-helm'
-    chart: openbao
-    targetRevision: 0.3.0
+    repoURL: 'https://helm.releases.hashicorp.com'
+    chart: vault
+    targetRevision: 0.28.0
     helm:
       values: |
         server:

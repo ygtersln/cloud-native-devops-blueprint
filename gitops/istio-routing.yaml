@@ -1,0 +1,64 @@
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: blueprint-local-tls
+  namespace: istio-ingress
+spec:
+  secretName: blueprint-local-tls-secret
+  duration: 720h
+  renewBefore: 120h
+  isCA: false
+  usages:
+    - server auth
+    - client auth
+  dnsNames:
+    - "*.blueprint.local"
+    - "blueprint.local"
+  issuerRef:
+    name: vault-issuer
+    kind: ClusterIssuer
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: blueprint-gateway
+  namespace: default
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*.blueprint.local"
+    tls:
+      httpsRedirect: true
+  - port:
+      number: 443
+      name: https
+      protocol: HTTPS
+    tls:
+      mode: SIMPLE
+      credentialName: blueprint-local-tls-secret
+    hosts:
+    - "*.blueprint.local"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: blueprint-vs
+  namespace: default
+spec:
+  hosts:
+  - "app.blueprint.local"
+  gateways:
+  - blueprint-gateway
+  http:
+  - route:
+    - destination:
+        host: blueprint-frontend.default.svc.cluster.local
+        port:
+          number: 80
