@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ai-stack
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: 'https://github.com/ygtersln/cloud-native-devops-blueprint.git'
+    path: kubernetes/ai-stack
+    targetRevision: main
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: ai-stack
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

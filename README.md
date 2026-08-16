@@ -31,11 +31,16 @@ graph TD
         %% Observability
         Prometheus[Prometheus & Grafana]
 
-        %% Application
+        %% Applications & AI
         subgraph Microservices
             Frontend[Go Frontend]
             Backend[Go Backend API]
             Redis[(Redis Cache)]
+        end
+        
+        subgraph AI Stack (LLMOps)
+            WebUI[Open WebUI<br/>Internal ChatGPT]
+            Ollama[Ollama Engine<br/>Llama 3.2 Model]
         end
 
         %% Connections within cluster
@@ -45,11 +50,15 @@ graph TD
         ESO -->|Injects Passwords| Redis
         
         IstioIngress -->|Routes Traffic| Frontend
+        IstioIngress -->|Routes Traffic| WebUI
         Frontend -->|GRPC / REST| Backend
         Backend -->|Reads/Writes| Redis
+        WebUI -->|API Requests| Ollama
         
         IstioMesh -.->|Enforces mTLS| Microservices
+        IstioMesh -.->|Enforces mTLS| WebUI
         Prometheus -.->|Scrapes Metrics| Microservices
+        Prometheus -.->|Scrapes Metrics| Ollama
     end
 
     %% External Traffic

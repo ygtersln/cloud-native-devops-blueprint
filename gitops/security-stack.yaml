@@ -131,7 +131,7 @@ spec:
   source:
     repoURL: 'https://istio-release.storage.googleapis.com/charts'
     chart: gateway
-    targetRevision: 1.22.3
+    targetRevision: 1.18.2
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: istio-ingress
