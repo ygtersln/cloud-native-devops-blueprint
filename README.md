@@ -73,9 +73,11 @@ graph TD
 ### 4. Comprehensive Observability
 - **Prometheus & Grafana:** Automatically scrapes metrics from K3s nodes, Istio proxies, and custom application endpoints, visualizing them in real-time dashboards.
 
-### 5. Infrastructure as Code (IaC) & CI
+### 5. Infrastructure as Code (IaC) & DevSecOps CI/CD
 - **Ansible:** Used to bootstrap the underlying Ubuntu VMs and install the base K3s cluster.
-- **GitHub Actions:** Automates the testing and building of multi-arch Docker images on every push to the `main` branch.
+- **GitHub Actions (CI/CD):** Automates the testing, building, and pushing of multi-arch Docker images on every push to the `main` branch. 
+- **Shift-Left Security (Trivy):** Before any image is pushed, the pipeline runs **Aqua Trivy** to scan the Docker images for OS and library vulnerabilities.
+- **Automated GitOps Commit:** Once the CI/CD pipeline passes, GitHub Actions automatically updates the Kustomize manifests with the new image tag (`${{ github.sha }}`) and pushes the changes back to the repository. ArgoCD detects this commit and instantly deploys the new version.
 
 ## 📦 How to Run
 
